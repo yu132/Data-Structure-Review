@@ -779,4 +779,32 @@ public class WrongOne implements IntSet, IntIterable {
 		return Math.max(height(node.left, h + 1), height(node.right, h + 1));
 	}
 
+	//红黑树删除废弃部分
+	//		for (IntRedBlackTreeNode x = toDeleteNode, xp, xpl, xpr;;) {
+	//			//			if(x==null||x==head)
+	//			//				break;
+	//			if ((xp = x.parent) == null) {
+	//				x.red = false;
+	//				break;
+	//			}
+	//			if (x.red) {
+	//				x.red = false;//？
+	//				break;
+	//			}
+	//			if ((xpl = xp.left) == x) {
+	//
+	//				//右兄弟为红，父节点为黑
+	//				if ((xpr = xp.right) != null && xpr.red) {
+	//					xpr.red = false;
+	//					xp.red = true;
+	//					rotateLeft(xp);
+	//					xpr = (xp = x.parent) == null ? null : xp.right;
+	//				}
+	//
+	//			} else {
+	//
+	//			}
+	//
+	//		}
+
 }

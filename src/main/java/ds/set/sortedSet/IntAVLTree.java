@@ -54,9 +54,6 @@ public class IntAVLTree implements IntSet, IntIterable {
 	@Override
 	public boolean remove(int element) {
 
-		// if (!contain(element))
-		// return false;
-
 		if (head == null)
 			return false;
 
@@ -226,42 +223,123 @@ public class IntAVLTree implements IntSet, IntIterable {
 			return true;
 		}
 
+		/**
+		 * 调节左边插入的影响
+		 * 
+		 * 前注：
+		 * 这个节点位于图中的A位置
+		 * h(node) => 以node为根的某棵子树的高度
+		 * bf(node) => 某个节点的平衡因子(balence factor)
+		 * 
+		 * 右高：
+		 * 插入B后平衡，无需旋转
+		 * 
+		 *                 A            
+		 *          B(h)        AR(h)
+		 *          
+		 *             （添加后）
+		 *             
+		 * 平衡：
+		 * 插入B后左高，无需旋转
+		 * 
+		 *                 A            
+		 *          B(h+1)       AR(h)      
+		 *          
+		 * 			      （添加后）
+		 * 
+		 * 左高：
+		 * LL旋转：
+		 * 
+		 * 由于BL处进行了插入而产生的旋转
+		 * 
+		 * 进行了一次右旋，由于旋转之后所有子树的高度一样，所以平衡因子都为0
+		 * 
+		 * 旋转之后h(C)=h+2 和插入之前的h(A)的高度相等，所以上面的部分肯定是平衡的
+		 * 
+		 * 
+		 *                 A                                 B
+		 *          B           AR(h)       =>      B(h+1)            A
+		 *   BL(h+1)  BR(h)                                     BR(h)    AL(h)
+		 * 
+		 * 				（添加后）						    （旋转后）
+		 * 
+		 * LR旋转：
+		 * 
+		 * 由于C处进行了插入而产生的旋转
+		 * 
+		 * 先进行左旋（B处），后进行右旋（A处）
+		 * 
+		 * p=h(CL)-h(CR) （旋转前）
+		 * 
+		 * 1.p=0 即h(CL)=h(CR)=h=0 那么旋转之后的高度相等,
+		 * 即 h(BL)=h(CL)=h(CR)=h(AR)=h=0，那么bf(B)=bf(A)=0
+		 * 
+		 * 2.p=1 即h(CL)=h(CR)+1=h 那么选转后h(BL)=h(AR)=h(CL)=h(CR)+1=h
+		 * 那么bf(B)=h(BL)-h(CL)=h-h=0  bf(A)=h(CR)-h(AR)=(h-1)-h=-1
+		 * 
+		 * 3.p=-1 即h(CL)+1=h(CR)=h 那么选转后h(BL)=h(AR)=h(CL)+1=h(CR)=h
+		 * 那么bf(B)=h(BL)-h(CL)=h-(h-1)=1  bf(A)=h(CR)-h(AR)=h-h=0
+		 * 
+		 * 旋转之后h(C)=h+2 和插入之前的h(A)的高度相等，所以上面的部分肯定是平衡的
+		 * 
+		 *                    A                                 C
+		 *           B             AR(h)     =>           B             A
+		 *   BL(h)      C(h+1)                      BL(h)    CL    CR     AR(h)
+		 *            CL    CR
+		 *            
+		 *                （添加后）						       （旋转后）
+		 *            
+		 */
 		private boolean rebalanceLeftGrown() {
 			switch (balanceFactor) {
-				case LEFT_HIGH:
-					if (left.balanceFactor == BF.LEFT_HIGH) {
+				case LEFT_HIGH:// 左高
+					if (left.balanceFactor == BF.LEFT_HIGH) {// 如果左子树高 LL旋转
 						rotateCW();
 						balanceFactor = BF.BALANCED;
 						right.balanceFactor = BF.BALANCED;
-					} else {
+					} else {// 右子树高则LR旋转
 						BF s = left.right.balanceFactor;
 						left.rotateCCW();
 						rotateCW();
-						switch (s) {
-							case LEFT_HIGH:
+						switch (s) {// LR旋转的三种情况		// bf(B)=left.balanceFactor
+							case LEFT_HIGH:// case2 		// bf(A)=right.balanceFactor
 								left.balanceFactor = BF.BALANCED;
 								right.balanceFactor = BF.RIGHT_HIGH;
 								break;
-							case RIGHT_HIGH:
+							case RIGHT_HIGH://case3
 								left.balanceFactor = BF.LEFT_HIGH;
 								right.balanceFactor = BF.BALANCED;
 								break;
-							default:
+							default://case0 p=0
 								left.balanceFactor = BF.BALANCED;
 								right.balanceFactor = BF.BALANCED;
 						}
 						balanceFactor = BF.BALANCED;
 					}
 					return false;
-				case RIGHT_HIGH:
+				case RIGHT_HIGH:// 右高 左增 则平衡
 					balanceFactor = BF.BALANCED;
 					return false;
-				default:
+				default:// 平衡 左增 则左高
 					balanceFactor = BF.LEFT_HIGH;
 					return true;
 			}
 		}
 
+		/**
+		 * 
+		 * 进行了一次左旋，由于旋转之后所有子树的高度一样，所以平衡因子都为0
+		 * 
+		 * 旋转之后h(C)=h+2 和插入之前的h(A)的高度相等，所以上面的部分肯定是平衡的
+		 * 
+		 *             A                                 B
+		 *      AL(h)       B           =>         A         BR(h+1)
+		 *            BL(h)   BR(h+1)        AL(h)   BL(h)
+		 *            
+		 *            
+		 *            
+		 *            TODO
+		 */
 		private boolean rebalanceRightGrown() {
 			switch (balanceFactor) {
 				case LEFT_HIGH:
@@ -382,7 +460,7 @@ public class IntAVLTree implements IntSet, IntIterable {
 			}
 		}
 
-		// 左旋
+		// LL旋转 右旋 顺时针旋转90度
 		private void rotateCW() {
 
 			int tempVal = val;
@@ -401,7 +479,7 @@ public class IntAVLTree implements IntSet, IntIterable {
 				right.right.parent = right;
 		}
 
-		// 右旋
+		// RR旋转 左旋 逆时针旋转90度
 		private void rotateCCW() {
 
 			int tempVal = val;
