@@ -46,7 +46,8 @@ public class SetTest {
 			Assert.assertEquals(count, sl.size());
 
 			for (int i = 0; i < 100000; ++i) {
-				int intVal = r.nextInt(10000);
+				int intVal = i;
+				//r.nextInt(10000);
 
 				System.out.println(sl.size());
 

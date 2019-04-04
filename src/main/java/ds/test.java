@@ -16,14 +16,16 @@ public class test {
 	public static void main(String[] args) {
 
 		//	System.out.println(Integer.MAX_VALUE<<2>>>10>>10>>10);
+		//
+		//		int x = 123123;
+		//		int y = 31233;
+		//
+		//		System.out.println(x / y + " " + (x % y));
+		//		System.out.println(-x / y + " " + (-x % y));
+		//		System.out.println(x / -y + " " + (x % -y));
+		//		System.out.println(-x / -y + " " + (-x % -y));
 
-		int x = 123123;
-		int y = 31233;
-
-		System.out.println(x / y + " " + (x % y));
-		System.out.println(-x / y + " " + (-x % y));
-		System.out.println(x / -y + " " + (x % -y));
-		System.out.println(-x / -y + " " + (-x % -y));
+		System.out.println(Integer.MAX_VALUE + Integer.MAX_VALUE);
 
 		//		TreeMap<Integer,Integer> map=new TreeMap<>();
 		//		
