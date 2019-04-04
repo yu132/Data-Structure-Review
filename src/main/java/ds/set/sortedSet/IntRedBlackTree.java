@@ -10,6 +10,15 @@ import ds.set.IntSet;
  * 
  * 红黑树  基本上是自己写的，除了添加部分参考了HashMap的红黑树实现
  * 
+ * 红黑树的5个性质：
+ * 1.红黑树的节点是红色或者黑色的
+ * 2.红黑树的根节点是黑色的
+ * 3.红黑树的外部节点是黑色的
+ * 4.红黑树的红色节点的孩子是黑色的
+ * 5.红黑树从根节点到每个外部节点的每条路径上黑色节点的个数相同
+ * 
+ * 这里的实现用null表示外部节点，不存在的节点都被认为是黑色的
+ * 
  * @author 87663
  *
  */
@@ -46,6 +55,99 @@ public class IntRedBlackTree implements IntSet, IntIterable {
 		return size;
 	}
 
+	/**
+	 * 红黑树的插入节点总是红色的（因为如果插入黑色节点，那么很容易违背性质5）
+	 * 
+	 * 然后需要根据多个节点的状况来维护红黑树的性质
+	 * 
+	 * 黑父：
+	 * 		case1：（自己为红色，父亲为黑色，兄弟为红或者不存在）
+	 * 		因为插入后不违背任何性质，所以无需任何修正操作
+	 * 
+	 * 			          XP(黑)
+	 * 	                 /  \
+	 *                 X(红) XPR(红或者不存在)
+	 *       
+	 * 		 （插入X后（或递归），性质保持，此图为P为左孩子的情况，为右孩子也是一样的）
+	 * 
+	 * 红父：（祖父为黑，叔叔待定，兄弟一定不存在（红色节点肯定不能只有一个孩子））
+	 * 		插入之后违背性质4，需要将父亲变为黑色，但是这样父亲为根的子树的黑高度会
+	 * 		增加1，那么会违背性质5，需要另外找办法修正
+	 * 
+	 * 		红叔：
+	 * 			case2：（自己为红色，父亲为红色，叔叔为红色，祖父为黑色）
+	 * 			此时修正操作很简单，将父亲和叔叔变为黑，祖父变成红色，
+	 * 			此时以祖父为根的子树黑高度不变，而且性质4也符合
+	 * 			但是由于祖父变成红色了，祖父和祖父的父节点是否符合性质4还需要递归处理
+	 * 
+	 *                  XPP(黑)                            XPP(红)
+	 * 			       /     \                            /     \
+	 *                XP(红)  XPPR(红)        =>         XP(黑)  XPPR(黑)
+	 *              /   \                              /   \
+	 * 			   X(红) XPR(不存在)                  X(红) XPR(不存在)
+	 * 
+	 * 		            （插入X后（或递归））                           （改变颜色，性质保持）
+	 * 
+	 * 		       （对于X处于任何位置，都是一样的，没有什么区别，只要父亲和叔叔是红色，祖父是黑色即可）
+	 * 
+	 * 		黑叔：
+	 * 			此时不能将叔叔节点变色来解决问题，那么此时就需要旋转来解决问题，
+	 * 			思想很简单，由于自己和祖父之间夹了一个多的红色节点，而且祖父和叔叔都是黑色的
+	 * 			所以我们可以把这个红色的节点放到祖父和叔叔中间，就不违反性质4了，
+	 * 			而且黑色的节点的位置没有发生违背性质5的改变
+	 * 
+	 * 			但是要根据父亲和自己位于祖父的什么位置来决定需要什么旋转方案
+	 * 
+	 * 			这4种方案和AVL树的旋转一模一样： LL,LR,RR,RL
+	 * 
+	 * 			case3：LL 
+	 * 			此时很简单，就是将祖父节点右旋，将父亲变成黑色，祖父变成红色即可
+	 * 
+	 * 			(*)表示这个节点为黑色或者不存在（为外部节点）
+	 * 
+	 *                  XPP(黑)                            XP(黑)
+	 * 			       /     \                            /   \
+	 *                XP(红)  XPPR(*)        =>         X(红) XPP(红)
+	 *              /   \                                    /     \
+	 * 			   X(红) XPR(*)                           XRP(*) XPPR(*)
+	 * 
+	 * 		             （插入X后（或递归））                               （一次旋转，性质保持）
+	 * 
+	 * 	 		（为*的节点同时存在或不存在，如果存在，则都为黑，并且X不是插入的节点，而是递归的节点）
+	 * 
+	 * 			case4：LR
+	 * 			此时需要两次旋转，先将父亲进行左旋，这个旋转无需变色，然后就变成case3
+	 * 			然后将祖父节点右旋，将父亲变成黑色，祖父变成红色即可
+	 * 
+	 * 			(*)表示这个节点为黑色或者不存在（为外部节点）
+	 * 
+	 *                        XPP(黑)                         XPP(黑)
+	 * 			             /     \                         /     \                    X(黑)
+	 *                    XP(红)  XPPR(*)     =>          X(红)  XPPR(*)               /    \
+	 *                   /   \                           /   \             =>      XP(红)    XPP(红)   
+	 * 			     XPL(*) X(红)                    XP(红)  XR(*)                /   \       /    \
+	 * 			           /   \                     /   \                    XPL(*)  XL(*) XR(*)  XPPR(*)
+	 *                  XL(*) XR(*)             XPL(*)   XL(*)  
+	 * 		                 
+	 *            （插入X后（或递归））                  （一次旋转得到中间状态）                   （二次旋转，性质保持）                        
+	 *            
+	 * 
+	 * 	 		（为*的节点同时存在或不存在，如果存在，则都为黑，并且X不是插入的节点，而是递归的节点）
+	 * 
+	 * 			case5：RR
+	 * 			此时很简单，就是将祖父节点左旋，将父亲变成黑色，祖父变成红色即可
+	 * 
+	 * 			（图和case3LL相反，其余一样）
+	 * 			
+	 * 			case6：RL
+	 * 			此时需要两次旋转，先将父亲进行右旋，这个旋转无需变色，然后就变成case5
+	 * 			然后将祖父节点左旋，将父亲变成黑色，祖父变成红色即可
+	 * 
+	 *          （图和case4LR相反，其余一样）
+	 * 
+	 * 			旋转之后子树根节点变成原来的父亲节点，依然为黑色，所以不需要递归处理
+	 * 
+	 */
 	@Override
 	public boolean add(int element) {
 
@@ -151,47 +253,6 @@ public class IntRedBlackTree implements IntSet, IntIterable {
 		}
 
 		return true;
-	}
-
-	// 右旋 向右旋转 顺时针旋转90度
-	// 由于这里的旋转实际上是没有改变节点的上下位置，就是把左边的节点拿到了右边
-	// 所以很多情况下的颜色并没有发生改变
-	// 同时也无需注意node的父节点和这颗子树的root的关系
-	// 是一种很好的实现方法，就是可读性会变差
-	public void rotateRight(IntRedBlackTreeNode node) {
-		int tempVal = node.val;
-		node.val = node.left.val;
-		node.left.val = tempVal;
-
-		IntRedBlackTreeNode tempNode = node.left;
-		node.left = tempNode.left;
-		tempNode.left = tempNode.right;
-		tempNode.right = node.right;
-		node.right = tempNode;
-
-		if (node.left != null)
-			node.left.parent = node;
-		if (node.right.right != null)
-			node.right.right.parent = node.right;
-	}
-
-	// 左旋 向左旋转 逆时针旋转90度
-	// 原理同上
-	public void rotateLeft(IntRedBlackTreeNode node) {
-		int tempVal = node.val;
-		node.val = node.right.val;
-		node.right.val = tempVal;
-
-		IntRedBlackTreeNode tempNode = node.right;
-		node.right = tempNode.right;
-		tempNode.right = tempNode.left;
-		tempNode.left = node.left;
-		node.left = tempNode;
-
-		if (node.right != null)
-			node.right.parent = node;
-		if (node.left.left != null)
-			node.left.left.parent = node.left;
 	}
 
 	@Override
@@ -429,6 +490,47 @@ public class IntRedBlackTree implements IntSet, IntIterable {
 
 			return val;
 		}
+	}
+
+	// 右旋 向右旋转 顺时针旋转90度
+	// 由于这里的旋转实际上是没有改变节点的上下位置，就是把左边的节点拿到了右边
+	// 所以很多情况下的颜色并没有发生改变
+	// 同时也无需注意node的父节点和这颗子树的root的关系
+	// 是一种很好的实现方法，就是可读性会变差
+	private void rotateRight(IntRedBlackTreeNode node) {
+		int tempVal = node.val;
+		node.val = node.left.val;
+		node.left.val = tempVal;
+
+		IntRedBlackTreeNode tempNode = node.left;
+		node.left = tempNode.left;
+		tempNode.left = tempNode.right;
+		tempNode.right = node.right;
+		node.right = tempNode;
+
+		if (node.left != null)
+			node.left.parent = node;
+		if (node.right.right != null)
+			node.right.right.parent = node.right;
+	}
+
+	// 左旋 向左旋转 逆时针旋转90度
+	// 原理同上
+	private void rotateLeft(IntRedBlackTreeNode node) {
+		int tempVal = node.val;
+		node.val = node.right.val;
+		node.right.val = tempVal;
+
+		IntRedBlackTreeNode tempNode = node.right;
+		node.right = tempNode.right;
+		tempNode.right = tempNode.left;
+		tempNode.left = node.left;
+		node.left = tempNode;
+
+		if (node.right != null)
+			node.right.parent = node;
+		if (node.left.left != null)
+			node.left.left.parent = node.left;
 	}
 
 	// 下面的代码都是用来测试的，和实现没有关系

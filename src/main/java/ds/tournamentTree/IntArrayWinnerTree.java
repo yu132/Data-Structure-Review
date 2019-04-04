@@ -56,62 +56,63 @@ import ds.IntComparator;
  * @author 87663
  * 
  */
-public class IntArrayWinnerTree implements IntWinnerTree{
-	
-	private final static IntComparator DEFAULT_COMPARATOR=IntComparator.GREATER;
-	
-	private int[] winnerTree;
+public class IntArrayWinnerTree implements IntWinnerTree {
 
-	private IntComparator comparator;
-	
-	private int size;
-	
-	private int n;
-	
+	private final static IntComparator	DEFAULT_COMPARATOR	= IntComparator.GREATER;
+
+	private int[]						winnerTree;
+
+	private IntComparator				comparator;
+
+	private int							size;
+
+	private int							n;
+
 	public IntArrayWinnerTree(int[] competitor) {
 		this(competitor, DEFAULT_COMPARATOR);
 	}
 
-	public IntArrayWinnerTree(int[] competitor,IntComparator comparator){
-		
-		if(competitor.length<=1)
+	public IntArrayWinnerTree(int[] competitor, IntComparator comparator) {
+
+		if (competitor.length <= 1)
 			throw new IllegalArgumentException("The number of competitor shouble be more than 1");
-		
-		this.comparator=comparator;
-		
-		size=competitor.length;
-		
+
+		this.comparator = comparator;
+
+		size = competitor.length;
+
 		//对于奇偶分别初始化外部节点，如果是奇数，就多加一个节点，使其变成偶数个节点
 		//将两种情况统一处理
-		if((size&1)==0){//size%2==0 偶数
-			winnerTree=new int[size<<1-1];// size*2-1;
-			System.arraycopy(competitor, 0, winnerTree, size-1, competitor.length);
-			
-			n=size;
-		}else{//奇数
-			winnerTree=new int[size<<1];//  size*2-1 +1
-			
-			System.arraycopy(competitor, 0, winnerTree, size-1, competitor.length);
-			winnerTree[winnerTree.length-1]=Integer.MIN_VALUE;//最小值保证其无效
-			
-			n=size+1;
+		if ((size & 1) == 0) {//size%2==0 偶数
+			winnerTree = new int[(size << 1) - 1];// size*2-1;
+			System.arraycopy(competitor, 0, winnerTree, size - 1, competitor.length);
+
+			n = size;
+		} else {//奇数
+			winnerTree = new int[size << 1];//  size*2-1 +1
+
+			System.arraycopy(competitor, 0, winnerTree, size - 1, competitor.length);
+			winnerTree[winnerTree.length - 1] = Integer.MIN_VALUE;//最小值保证其无效
+
+			n = size + 1;
 		}
-		
+
 		//初始化第二类内部节点
-		for(int index=n-2;index>=(n-2)<<1;--index){
-			int child1=index<<1+1,child2=index<<1+2;
-			winnerTree[index]=comparator.compare(winnerTree[child1],
-					winnerTree[child2])>=0?child1:child2;
+		for (int index = n - 2; index >= (n - 2) >> 1; --index) {
+			int child1 = (index << 1) + 1, child2 = (index << 1) + 2;
+			winnerTree[index] = comparator.compare(winnerTree[child1], winnerTree[child2]) >= 0
+					? child1 : child2;
 		}
-		
+
 		//初始化第一类内部节点
-		for(int index=(n-2)<<1-1;index>=0;--index){
-			int child1=winnerTree[index<<1+1],child2=winnerTree[index<<1+2];
-			winnerTree[index]=comparator.compare(winnerTree[child1],
-					winnerTree[child2])>=0?child1:child2;
+		for (int index = ((n - 2) >> 1) - 1; index >= 0; --index) {
+
+			int child1 = winnerTree[(index << 1) + 1], child2 = winnerTree[(index << 1) + 2];
+			winnerTree[index] = comparator.compare(winnerTree[child1], winnerTree[child2]) >= 0
+					? child1 : child2;
 		}
 	}
-	
+
 	@Override
 	public int size() {
 		return size;
@@ -124,40 +125,40 @@ public class IntArrayWinnerTree implements IntWinnerTree{
 
 	@Override
 	public int getWinnerIndex() {
-		return winnerTree[0]-n+1;//将绝对的数组索引移动到相对索引再返回
+		return winnerTree[0] - n + 1;//将绝对的数组索引移动到相对索引再返回
 	}
 
 	@Override
 	public void rePlay(int index, int score) {
-		
-		if(index<0||index>size-1)//即使我们补充了一个元素，我们并不允许给其赋值，即其是透明的
+
+		if (index < 0 || index > size - 1)//即使我们补充了一个元素，我们并不允许给其赋值，即其是透明的
 			throw new IllegalArgumentException("Index should be between 0 to size-1");
-		
+
 		//将相对索引移动到绝对的数组索引上
-		index=n-1+index;
-		
+		index = n - 1 + index;
+
 		//更新外部节点
-		winnerTree[index]=score;
-		
+		winnerTree[index] = score;
+
 		//父节点索引为 （子节点索引-1）/2
-		index=(index-1)>>1;
-		
+		index = (index - 1) >> 1;
+
 		//更新第二类内部节点
-		int child1=index<<1+1,child2=index<<1+2;
-		winnerTree[index]=comparator.compare(winnerTree[child1],
-				winnerTree[child2])>=0?child1:child2;
-				
-		do{//对于每个第一类内部节点
-			
-			index=(index-1)>>1;
-			
+		int child1 = (index << 1) + 1, child2 = (index << 1) + 2;
+		winnerTree[index] = comparator.compare(winnerTree[child1], winnerTree[child2]) >= 0 ? child1
+				: child2;
+
+		do {//对于每个第一类内部节点
+
+			index = (index - 1) >> 1;
+
 			//更新这个节点
-			child1=winnerTree[index<<1+1];
-			child2=winnerTree[index<<1+2];
-			winnerTree[index]=comparator.compare(winnerTree[child1],
-					winnerTree[child2])>=0?child1:child2;
-			
-		}while(index!=0);//如果节点的值是0，证明已经到顶了，同时这个节点
-							//已经被我们处理完了，我们可以退出了
+			child1 = winnerTree[(index << 1) + 1];
+			child2 = winnerTree[(index << 1) + 2];
+			winnerTree[index] = comparator.compare(winnerTree[child1], winnerTree[child2]) >= 0
+					? child1 : child2;
+
+		} while (index != 0);//如果节点的值是0，证明已经到顶了，同时这个节点
+								//已经被我们处理完了，我们可以退出了
 	}
 }

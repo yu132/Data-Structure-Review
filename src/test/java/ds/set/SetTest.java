@@ -8,7 +8,7 @@ import org.junit.Test;
 
 import ds.IntIterable;
 import ds.IntIterator;
-import ds.set.sortedSet.IntAVLTree;
+import ds.set.sortedSet.IntRedBlackTree;
 
 public class SetTest {
 
@@ -16,7 +16,7 @@ public class SetTest {
 	public void test() {
 
 		for (int j = 0; j < 1; ++j) {
-			IntAVLTree sl = new IntAVLTree();
+			IntRedBlackTree sl = new IntRedBlackTree();
 			HashSet<Integer> set = new HashSet<>();
 
 			Random r = new Random();
