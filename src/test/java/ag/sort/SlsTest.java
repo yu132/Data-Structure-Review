@@ -2,11 +2,11 @@ package ag.sort;
 
 import org.junit.Test;
 
-public class Hptest {
+public class SlsTest {
 
 	@Test
 	public void test() {
-		new TestSort().test(new HeapSort(), 100000);
+		new TestSort().test(new SkipListSort(), 100000);
 	}
 
 }

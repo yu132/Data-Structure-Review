@@ -1,6 +1,6 @@
 package ag.math;
 
-public class IntArrayMath {
+public final class IntArrayMath {
 
 	public static int avg(int array[]) {
 		int ans = 0, res = 0, n = array.length;

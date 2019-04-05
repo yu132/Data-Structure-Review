@@ -6,7 +6,7 @@ public class WsTest {
 
 	@Test
 	public void test() {
-		new TestSort().test(new WinnerSort());
+		new TestSort().test(new WinnerSort(), 100000);
 	}
 
 }

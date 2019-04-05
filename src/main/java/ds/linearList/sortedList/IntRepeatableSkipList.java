@@ -1,13 +1,12 @@
-package ds.set.sortedSet;
+package ds.linearList.sortedList;
 
 import java.util.Random;
 
 import ds.IntIterable;
 import ds.IntIterator;
 import ds.linearList.UnchekedIntArrayList;
-import ds.set.IntSet;
 
-public final class IntSkipList implements IntSet, IntIterable {
+public class IntRepeatableSkipList implements IntSortedList, IntIterable {
 
 	private static class SkipNode {
 		int			val;
@@ -34,15 +33,15 @@ public final class IntSkipList implements IntSet, IntIterable {
 
 	private int					rebuildThreshold;
 
-	public IntSkipList() {
+	public IntRepeatableSkipList() {
 		this(DEFAULT_CAPACITY);
 	}
 
-	public IntSkipList(int probablyCapacity) {
+	public IntRepeatableSkipList(int probablyCapacity) {
 		this(probablyCapacity, false);
 	}
 
-	public IntSkipList(int probablyCapacity, boolean needRebuild) {
+	public IntRepeatableSkipList(int probablyCapacity, boolean needRebuild) {
 		super();
 
 		if (probablyCapacity < DEFAULT_CAPACITY)
@@ -132,13 +131,13 @@ public final class IntSkipList implements IntSet, IntIterable {
 
 			SkipNode next = node.nextNodes[level];
 
-			while (next != null && next.val < element) {
+			while (next != null && next.val <= element) {
 				node = next;
 				next = node.nextNodes[level];
 			}
 
-			if (next != null && next.val == element)// 有相等的元素出现，插入失败，直接返回
-				return false;
+			//			if (next != null && next.val == element)// 有相等的元素出现，插入失败，直接返回
+			//				return false;
 			// else(next.val>element)
 			nodeBefore[level--] = node;
 		}
