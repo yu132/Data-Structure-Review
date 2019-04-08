@@ -1,21 +1,25 @@
 package ds.set.sortedSet;
 
 import java.util.Arrays;
+import java.util.NoSuchElementException;
 
 import ds.IntIterable;
 import ds.IntIterator;
-import ds.linearList.IntArrayList;
 import ds.set.IntSet;
+import ds.stack.FastIntArrayStack;
 
 /**
  * B树的实现
  * 
- * B树有5个特性
+ * B树有4个特性
  * 
  * 1、根结点至少有两个子女；
  * 2、每个非根节点所包含的关键字个数 j 满足：┌m/2┐ - 1 <= j <= m - 1；
  * 3、除根结点以外的所有结点（不包括叶子结点）的度数正好是关键字总数加1，故内部子树个数 k 满足：┌m/2┐ <= k <= m ；
  * 4、所有的叶子结点都位于同一层。
+ * 
+ * 写起来其实很简单，主要是需要处理n叉的问题，由于值和孩子都是数组，所以需要很多的数组复制的操作
+ * 这比二叉树要难，但是平衡的操作其实比较简单，类别比较少，所以实现总体是要比AVL和红黑树简单不少的
  * 
  * @author 87663
  */
@@ -86,6 +90,31 @@ public final class IntBTree implements IntSet, IntIterable {
 			this.vals = vals;
 			this.childs = childs;
 			this.parent = parent;
+		}
+
+		/**
+		 * 向以本节点为根的子树添加元素，如果不是叶子节点，
+		 * 则需要找到能插入的叶子节点
+		 * 
+		 * @param element
+		 * @return
+		 */
+		boolean add(int element) {
+
+			int index = Arrays.binarySearch(vals, 0, valNum, element);
+
+			if (index >= 0) // 值已经存在，返回假
+				return false;
+
+			index = -index - 1;//插入点
+
+			if (childs != null) {// 有孩子，不是叶子节点，不能直接插入
+				return childs[index].add(element);//递归下一层
+			}
+
+			insert(element, null, null);// 是叶子节点就插入这个值
+
+			return true;
 		}
 
 		/**
@@ -181,7 +210,7 @@ public final class IntBTree implements IntSet, IntIterable {
 				if (this == head) {// 自己为头节点 那么需要特殊处理，因为分裂之后的元素不能交给父亲
 										// 因为头节点没有父亲 那么我们需要新建一个新的头节点
 					head = new IntBTreeNode(1, new int[vals.length],
-							new IntBTreeNode[vals.length + 1], head);//新建头节点
+							new IntBTreeNode[vals.length + 1], null);//新建头节点
 					head.vals[0] = midValue;//这个头节点只有一个元素，就是需要给父节点的那个元素
 					head.childs[0] = leftPart;//并且分别存储左节点
 					head.childs[1] = rightPart;//和右节点
@@ -193,31 +222,6 @@ public final class IntBTree implements IntSet, IntIterable {
 				}
 
 			}
-		}
-
-		/**
-		 * 向以本节点为根的子树添加元素，如果不是叶子节点，
-		 * 则需要找到能插入的叶子节点
-		 * 
-		 * @param element
-		 * @return
-		 */
-		boolean add(int element) {
-
-			int index = Arrays.binarySearch(vals, 0, valNum, element);
-
-			if (index >= 0) // 值已经存在，返回假
-				return false;
-
-			index = -index - 1;//插入点
-
-			if (childs != null) {// 有孩子，不是叶子节点，不能直接插入
-				return childs[index].add(element);//递归下一层
-			}
-
-			insert(element, null, null);// 是叶子节点就插入这个值
-
-			return true;
 		}
 
 		/**
@@ -403,6 +407,7 @@ public final class IntBTree implements IntSet, IntIterable {
 
 				if (parent == head && parent.valNum == 1) {// 如果父亲是头节点，并且节点数只剩下1，按照常规的合并方法
 					head = newNode;							// 头节点的元素数量会变成0，然后只有一个指针指向新节点，很明显是不对的
+					head.parent = null;
 					return;									// 应该把这个新的节点设置为头节点即可
 				}
 
@@ -428,6 +433,10 @@ public final class IntBTree implements IntSet, IntIterable {
 		 * 测试用代码
 		 */
 		boolean check() {
+			if (this == head && parent != null) {
+				System.out.println("e5");
+				return false;
+			}
 			if (this != head && parent == null) {
 				System.out.println("e4");
 				return false;
@@ -516,38 +525,128 @@ public final class IntBTree implements IntSet, IntIterable {
 	 * 
 	 * @author 87663
 	 */
+	//	private static class IntBTreeIterator implements IntIterator {
+	//		private IntArrayList	list;
+	//		private int				index	= 0;
+	//
+	//		IntBTreeIterator(IntBTree bTree) {
+	//			list = new IntArrayList(bTree.size);
+	//			if (bTree.head != null)
+	//				dfs(bTree.head, list);
+	//		}
+	//
+	//		private static void dfs(IntBTreeNode node, IntArrayList list) {
+	//			if (node.childs != null)
+	//				dfs(node.childs[0], list);
+	//			for (int i = 0; i < node.valNum; ++i) {
+	//				list.add(node.vals[i]);
+	//				if (node.childs != null)
+	//					dfs(node.childs[i + 1], list);
+	//			}
+	//		}
+	//
+	//		@Override
+	//		public boolean hasNext() {
+	//			return index != list.size();
+	//		}
+	//
+	//		@Override
+	//		public int next() {
+	//			if (index == list.size())
+	//				throw new IllegalArgumentException("No more element");
+	//			return list.get(index++);
+	//		}
+	//
+	//	}
+
+	/**
+	 * B树的遍历迭代器，其按照需求遍历，而不是先遍历一次，在展示
+	 * 
+	 * 思想和二叉树的遍历其实没什么区别，就是一层的元素和孩子变多了一些
+	 * 
+	 * @author 87663
+	 */
 	private static class IntBTreeIterator implements IntIterator {
-		private IntArrayList	list;
-		private int				index	= 0;
 
-		IntBTreeIterator(IntBTree bTree) {
-			list = new IntArrayList(bTree.size);
-			if (bTree.head != null)
-				dfs(bTree.head, list);
-		}
+		/**
+		 * 当前节点
+		 */
+		private IntBTreeNode		node;
 
-		private static void dfs(IntBTreeNode node, IntArrayList list) {
-			if (node.childs != null)
-				dfs(node.childs[0], list);
-			for (int i = 0; i < node.valNum; ++i) {
-				list.add(node.vals[i]);
-				if (node.childs != null)
-					dfs(node.childs[i + 1], list);
-			}
+		/**
+		 * 下一个元素的位于当前节点的索引
+		 */
+		private int					index;
+
+		/**
+		 * 用于保存父亲遍历索引的栈
+		 */
+		private FastIntArrayStack	stack;
+
+		public IntBTreeIterator(IntBTree bTree) {
+			super();
+
+			node = bTree.head;
+
+			if (node == null)//如果头节点不存在，就没有元素了
+				return;
+
+			int maxHigh = (int) (Math.log((bTree.size + 1) / 2) / Math.log(bTree.rank));//二叉树的最大高度
+
+			stack = new FastIntArrayStack(maxHigh);//预设栈大小
+
+			findMinChild();//找到一个最左的叶子节点
 		}
 
 		@Override
 		public boolean hasNext() {
-			return index != list.size();
+			return node != null;//如果当前节点为空，那么没有下一个元素了
 		}
 
 		@Override
 		public int next() {
-			if (index == list.size())
-				throw new IllegalArgumentException("No more element");
-			return list.get(index++);
+			if (node == null)
+				throw new NoSuchElementException("No more element");
+
+			int val = node.vals[index++];//先把值拿出来
+
+			if (node.childs == null) {//如果是叶子节点
+				if (index == node.valNum)//这个节点已经遍历完了
+					findNextParent();//去找没遍历完的最近的一个祖先
+			} else {//如果不是叶子节点
+				stack.push(index);//把当前索引压入栈，由于上面已经加一了，
+									//所以这个是下一次这个节点应该遍历的值
+
+				node = node.childs[index];//去寻找最左的叶子节点
+				findMinChild();
+			}
+			return val;
 		}
 
+		/**
+		 * 找没遍历完的最近的一个祖先
+		 */
+		private void findNextParent() {
+			while (true) {
+				node = node.parent;//找到父亲节点
+				if (node == null)//父亲节点为空，那么头节点已经遍历完了，可以结束
+					return;
+				index = stack.pop();//把父亲节点的索引值从栈中拿出来
+				if (index != node.valNum)//父亲没遍历完，就停止递归，
+					break;					//否则就递归找更高层的祖先
+			}
+		}
+
+		/**
+		 * 寻找最左的叶子节点
+		 */
+		private void findMinChild() {
+			while (node.childs != null) {//如果这个节点有孩子
+				node = node.childs[0];//那肯定有至少2个孩子，选取第一个孩子
+				stack.push(0);//把当前的索引压入栈
+			}
+			index = 0;//孩子的索引为0
+		}
 	}
 
 	/**
@@ -558,91 +657,5 @@ public final class IntBTree implements IntSet, IntIterable {
 			return true;
 		return head.check();
 	}
-
-	//	private static class IntBTreeIterator implements IntIterator { //@BUG
-	//
-	//		private IntBTreeNode		node;
-	//
-	//		private int					index;
-	//
-	//		private FastIntArrayStack	stack;
-	//
-	//		private boolean				hasNext;
-	//
-	//		private int					nextVal;
-	//
-	//		public IntBTreeIterator(IntBTree bTree) {
-	//			super();
-	//
-	//			node = bTree.head;
-	//
-	//			if (node == null) {
-	//				hasNext = false;
-	//				return;
-	//			}
-	//
-	//			int maxHigh = (int) (Math.log((bTree.size + 1) / 2) / Math.log(bTree.rank));
-	//
-	//			stack = new FastIntArrayStack(maxHigh);
-	//
-	//			while (node.childs != null) {
-	//				node = node.childs[0];
-	//				stack.push(0);
-	//			}
-	//
-	//			index = 1;
-	//
-	//			nextVal = node.vals[0];
-	//
-	//			hasNext = true;
-	//		}
-	//
-	//		@Override
-	//		public boolean hasNext() {
-	//			return hasNext;
-	//		}
-	//
-	//		@Override
-	//		public int next() {
-	//			if (!hasNext)
-	//				throw new IllegalArgumentException("No more element");
-	//
-	//			int val = nextVal;
-	//
-	//			if (index != node.valNum)
-	//				nextVal = node.vals[index++];
-	//			else {
-	//				IntBTreeNode p = node.parent;
-	//				while (true) {
-	//					int pIndex = stack.pop();
-	//
-	//					if (pIndex == p.valNum) {
-	//						if ((p = p.parent) == null) {
-	//							hasNext = false;
-	//							break;
-	//						}
-	//						continue;
-	//					}
-	//
-	//					nextVal = p.vals[pIndex++];
-	//
-	//					stack.push(pIndex);
-	//
-	//					p = p.childs[pIndex];
-	//
-	//					while (p.childs != null) {
-	//						p = p.childs[0];
-	//						stack.push(0);
-	//					}
-	//
-	//					index = 0;
-	//
-	//					break;
-	//				}
-	//			}
-	//
-	//			return val;
-	//		}
-	//	}
 
 }
