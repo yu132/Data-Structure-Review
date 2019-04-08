@@ -2,7 +2,7 @@ package ag.sort;
 
 import java.util.Random;
 
-import ds.utils.MyArrays;
+import utils.MyIntArrays;
 
 public final class QuickSort implements IntArraySort {
 
@@ -45,7 +45,7 @@ public final class QuickSort implements IntArraySort {
 
 			int pivot = RANDOM.nextInt(b - f) + f;
 
-			MyArrays.swap(array, f, pivot);
+			MyIntArrays.swap(array, f, pivot);
 
 			int mid = partition(array, f, b);
 			sortIntArray(array, f, mid);

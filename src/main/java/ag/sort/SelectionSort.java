@@ -1,6 +1,6 @@
 package ag.sort;
 
-import ds.utils.MyArrays;
+import utils.MyIntArrays;
 
 public class SelectionSort implements IntArraySort {
 
@@ -20,10 +20,10 @@ public class SelectionSort implements IntArraySort {
 			}
 
 			if (min != f)
-				MyArrays.swap(array, f, min);
+				MyIntArrays.swap(array, f, min);
 
 			if (max != f) {
-				MyArrays.swap(array, b, max);
+				MyIntArrays.swap(array, b, max);
 				--b;
 			}
 

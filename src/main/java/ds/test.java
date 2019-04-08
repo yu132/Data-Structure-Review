@@ -1,5 +1,7 @@
 package ds;
 
+import java.util.Arrays;
+
 public class test {
 
 	public static void getMin2Pow(int x) {
@@ -24,8 +26,12 @@ public class test {
 		//		System.out.println(-x / y + " " + (-x % y));
 		//		System.out.println(x / -y + " " + (x % -y));
 		//		System.out.println(-x / -y + " " + (-x % -y));
+		//
+		//		System.out.println(-(Integer.MIN_VALUE + 1));
 
-		System.out.println(Integer.MAX_VALUE + Integer.MAX_VALUE);
+		int[] a = { 8942, 7558, 7789, 8277, 9737, 0, 0, 0, 0 };
+
+		System.out.println(Arrays.binarySearch(a, 0, 5, 8942));
 
 		//		TreeMap<Integer,Integer> map=new TreeMap<>();
 		//		

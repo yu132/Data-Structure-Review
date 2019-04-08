@@ -1,4 +1,4 @@
-package ds.utils;
+package utils;
 
 public class GetNext2Pow {
 

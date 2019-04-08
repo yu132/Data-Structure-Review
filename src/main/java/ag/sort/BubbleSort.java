@@ -1,6 +1,6 @@
 package ag.sort;
 
-import ds.utils.MyArrays;
+import utils.MyIntArrays;
 
 public class BubbleSort implements IntArraySort {
 
@@ -15,7 +15,7 @@ public class BubbleSort implements IntArraySort {
 
 			for (int j = f; j < k; ++j) {
 				if (array[j] > array[j + 1]) {
-					MyArrays.swap(array, j, j + 1);
+					MyIntArrays.swap(array, j, j + 1);
 					flag = false;
 					lastPos = j;
 				}

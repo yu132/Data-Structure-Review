@@ -4,8 +4,8 @@ import java.util.Arrays;
 import java.util.NoSuchElementException;
 
 import ds.IntComparator;
-import ds.utils.GetNext2Pow;
-import ds.utils.MyArrays;
+import utils.GetNext2Pow;
+import utils.MyIntArrays;
 
 /**
  * 这个实现里面heap[0]是没有使用的，浪费了一个空间
@@ -132,7 +132,7 @@ public class BinaryHeap implements IntPriorityQueue {
 
 			//否则将两者置换，并且检查那颗子树是否符合，
 			//另一颗子树由于没有改变，所以无需处理
-			MyArrays.swap(heap, child, father);
+			MyIntArrays.swap(heap, child, father);
 
 			father = child;
 			child = (father << 1) + 1;
@@ -155,7 +155,7 @@ public class BinaryHeap implements IntPriorityQueue {
 
 			//否则将两者置换，然后我们需要继续检查这个父节点
 			//和其祖先节点是否符合规范
-			MyArrays.swap(heap, child, father);
+			MyIntArrays.swap(heap, child, father);
 
 			child = father;
 			father = (child - 1) >> 1;
