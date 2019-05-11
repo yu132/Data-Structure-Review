@@ -13,4 +13,9 @@ public class MyIntArrays {
 		array[y] = num;
 	}
 
+	public static void reverse(int[] array, int from, int length) {
+		for (int to = from + length - 1, mid = from + (length >> 1); from < mid; ++from, --to)
+			swap(array, from, to);
+	}
+
 }
