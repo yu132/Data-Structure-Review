@@ -17,6 +17,8 @@ import common.ag.math.avg.IntAvgCalculator;
  * 
  * 平均时间比BellmanFord要好不少，但是在没有负权值的情况下，比不上使用堆的Dijkstra
  * 
+ * 但是其比BellmanFord缺少了检查负环的能力
+ * 
  * @see https://en.wikipedia.org/wiki/Shortest_Path_Faster_Algorithm
  * 
  * @author 87663
@@ -28,12 +30,12 @@ public final class SPFA {
 	 * @param adjacencyList		邻接表	@see common.ag.model.graph.AdjacencyList
 	 * 
 	 * 				有一个要求，从一个点到另一个点之间任意路径的大小不能小于Integer.MIN_VALUE
-	 * 				否则可能出错
+	 * 				否则可能出错,而且不能出现负环，出现负环的时候也会出错
 	 * 
 	 * @param from				起始点
 	 * @param MAX_LENGTH		最大长度，超过这个大小的长度，被认为是无穷大
 	 * 
-	 * @return					一个二维数组（或null）
+	 * @return					一个二维数组
 	 * 
 	 * 				二维数组的情况下，其中包含两个一维数组：
 	 * 
@@ -42,8 +44,6 @@ public final class SPFA {
 	 * 				[1][i]为predecessor，表示各点i的前序节点为那个节点，即起点需要通过什么节点到达本节点i
 	 * 					有可能会通过很多个节点才能到达某个节点，递归遍历数组即可求得路径
 	 * 					也可能有的节点无法到达，则值为-1
-	 * 
-	 * 				也会在出现负环的时候返回null，因为本算法无法解决有负环的图的单源最短路径
 	 * 
 	 */
 	public static int[][] spfa(List<List<int[]>> adjacencyList, int from,
@@ -103,35 +103,30 @@ public final class SPFA {
 	/**
 	 * Small Label First 就是将小的元素移动到前面
 	 */
-	public final static QueueOptimizer	SLF;
+	public final static QueueOptimizer SLF = (queue, distance) -> {
+		while (distance[queue.getLast()] < distance[queue
+				.getFirst()]) {
+			queue.addFirst(queue.removeLast());
+		}
+	};
 	
 	/**
 	 * Large Label Last 就是将大的元素移动到后面
 	 */
-	public final static QueueOptimizer	LLL;
-	
-	static {
-		SLF = (queue, distance) -> {
-			while (distance[queue.getLast()] < distance[queue.getFirst()]) {
-				queue.addFirst(queue.removeLast());
-			}
-		};
+	public final static QueueOptimizer LLL = (queue, distance) -> {
 		
-		LLL = (queue, distance) -> {
-			
-			IntAvgCalculator cal = new IntAvgCalculator(
-					queue.size());
-			
-			for (Integer point : queue) {
-				cal.offer(distance[point]);
-			}
-			
-			int avg = cal.getAvg();
-			
-			while (distance[queue.getFirst()] > avg)
-				queue.addLast(queue.removeFirst());
-		};
-	}
+		IntAvgCalculator cal = new IntAvgCalculator(
+				queue.size());
+		
+		for (Integer point : queue) {
+			cal.offer(distance[point]);
+		}
+		
+		int avg = cal.getAvg();
+		
+		while (distance[queue.getFirst()] > avg)
+			queue.addLast(queue.removeFirst());
+	};
 	
 	public static int[][] spfaWithQueueOptimization(List<List<int[]>> adjacencyList, int from,
 			final int MAX_LENGTH, QueueOptimizer queueOptimizer) {
