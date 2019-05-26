@@ -40,4 +40,12 @@ public class MyIntArrayTest {
 		Assert.assertArrayEquals(expectation3, case3);
 	}
 
+	@Test
+	public void testPrint() {
+		int[] array = {
+				0, 1, 2, 3, 4, 5, 6, 7, 8, 9
+		};
+		MyIntArrays.printArray(array, 1, 7);
+	}
+
 }

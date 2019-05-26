@@ -1,6 +1,6 @@
 package ag.unionFind;
 
-public abstract class AbstractUnionFind implements IUnionFind{
+public abstract class AbstractUnionFind implements UnionFind{
 
 	protected int count;
 	

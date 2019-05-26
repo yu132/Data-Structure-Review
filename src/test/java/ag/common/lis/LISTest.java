@@ -3,7 +3,7 @@ package ag.common.lis;
 import org.junit.Assert;
 import org.junit.Test;
 
-import ag.common.longestIncreasingSubsequence.LongestIncreasingSubsequence;
+import common.ag.subsequence.longestIncreasingSubsequence.LongestIncreasingSubsequence;
 
 public class LISTest {
 

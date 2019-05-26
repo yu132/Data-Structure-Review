@@ -5,6 +5,8 @@ import java.util.Arrays;
 import org.junit.Assert;
 import org.junit.Test;
 
+import common.ag.array.arrayRotation.ArrayRotation;
+
 public class ArrayRotationTest {
 
 	@Test
