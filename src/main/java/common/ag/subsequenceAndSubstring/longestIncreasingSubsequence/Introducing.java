@@ -1,11 +1,18 @@
-package common.ag.subsequence.longestIncreasingSubsequence;
+package common.ag.subsequenceAndSubstring.longestIncreasingSubsequence;
 
 public class Introducing {
-
+	
 	/**
 	 * 最长上升子序列是一种非常常见的问题，最经典的表示就是在一个数组里面
 	 * 找到一段最长的上升子序列，即后面的元素总是大于之前的元素的，
 	 * 能相等则为最长不下降子序列
+	 * 
+	 * 最长上升子序列思想：
+	 * O(nlogn)的算法的思想是使用一个栈来存储当前最好的情况，
+	 * 每遇到一个数，如果其比任何数都大，那么就放在栈顶，
+	 * 否则就寻找第一个大于等于本数的地方，即总是用一个比较小的数
+	 * 来替换原来大的那个数，下次匹配的时候，比较的时候数就会变小
+	 * 最后栈的长度就是最长上升子序列的长度
 	 * 
 	 * 很多种类的问题都可以转化成这个问题来求解
 	 * 
@@ -20,5 +27,5 @@ public class Introducing {
 	 * 		这个问题需要先将一维进行排序，另一维则是最长上升子序列，
 	 * 		即可算出能嵌套的最大层数
 	 */
-
+	
 }

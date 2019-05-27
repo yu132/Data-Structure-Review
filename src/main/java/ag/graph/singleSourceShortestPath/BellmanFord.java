@@ -3,6 +3,8 @@ package ag.graph.singleSourceShortestPath;
 import java.util.Arrays;
 import java.util.List;
 
+import common.ag.model.graph.AdjacencyList;
+
 /**
  * 这个算法是BellmanFord，感觉和floyd算法非常像，都是基于松弛的算法
  * 
@@ -12,9 +14,9 @@ import java.util.List;
  * @author 87663
  */
 public final class BellmanFord {
-
+	
 	/**
-	 * @param adjacencyList		邻接表	@see common.ag.model.graph.AdjacencyList
+	 * @param adjacencyList		邻接表	@see {@link AdjacencyList}
 	 * 
 	 * 				有一个要求，从一个点到另一个点之间任意路径的大小不能小于Integer.MIN_VALUE
 	 * 				否则可能出错
@@ -37,32 +39,32 @@ public final class BellmanFord {
 	 */
 	public static int[][] bellmanFord(List<List<int[]>> adjacencyList, int from,
 			final int MAX_LENGTH) {
-
+		
 		int n = adjacencyList.size();
-
+		
 		int[] distance = new int[n];
 		int[] predecessor = new int[n];
-
+		
 		Arrays.fill(distance, MAX_LENGTH);
 		Arrays.fill(predecessor, -1);
-
+		
 		distance[from] = 0;
-
+		
 		for (int i = 0; i < n - 1; ++i) {//按照原始算法，必须进行n-1次迭代，但是如果没有改变，则可以提前退出
 											//这个地方使用while(true)是不对的，因为如果出现负环，则会无穷的进行下去
-
+			
 			boolean notChanged = true;
-
+			
 			//遍历边集
 			for (int fromPoint = 0; fromPoint < n; ++fromPoint) {
-
+				
 				List<int[]> edges = adjacencyList.get(fromPoint);
-
+				
 				for (int[] edge : edges) {
-
+					
 					int toPoint = edge[0];
 					int dis = edge[1];
-
+					
 					if (distance[fromPoint] + dis < distance[toPoint]) {//松弛化
 						distance[toPoint] = distance[fromPoint] + dis;
 						predecessor[toPoint] = fromPoint;
@@ -70,29 +72,29 @@ public final class BellmanFord {
 					}
 				}
 			}
-
+			
 			if (notChanged)//没有改变则提前退出
 				break;
 		}
-
+		
 		//检查是否有负环，这也是上面不能用while(true)的原因，内部和内层循环几乎是一样的
 		for (int fromPoint = 0; fromPoint < n; ++fromPoint) {
-
+			
 			List<int[]> edges = adjacencyList.get(fromPoint);
-
+			
 			for (int[] edge : edges) {
-
+				
 				int toPoint = edge[0];
 				int dis = edge[1];
-
+				
 				if (distance[fromPoint] + dis < distance[toPoint])//如果经过n-1次迭代还能继续松弛
 					return null;									//则图内存在负环，本算法对这种情况无能为力
 			}
 		}
-
+		
 		return new int[][] {
 				distance, predecessor
 		};
 	}
-
+	
 }

@@ -1,4 +1,4 @@
-package common.ag.subsequence.longestIncreasingSubsequence;
+package common.ag.subsequenceAndSubstring.longestIncreasingSubsequence;
 
 import common.ag.cppstl.BinarySearchBound;
 

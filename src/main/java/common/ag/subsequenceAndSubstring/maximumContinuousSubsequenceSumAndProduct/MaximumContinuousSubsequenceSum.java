@@ -1,4 +1,4 @@
-package common.ag.subsequence.maximumContinuousSubsequenceSumAndProduct;
+package common.ag.subsequenceAndSubstring.maximumContinuousSubsequenceSumAndProduct;
 
 public class MaximumContinuousSubsequenceSum {
 
