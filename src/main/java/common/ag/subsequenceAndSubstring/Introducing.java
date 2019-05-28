@@ -3,7 +3,7 @@ package common.ag.subsequenceAndSubstring;
 public class Introducing {
 	
 	/**
-	 * 子序列是一类非常常见的问题分类
+	 * 子序列和字串是一类非常常见的问题分类
 	 * 
 	 * 分为两类，连续子序列（字串）substring 和不连续子序列 subsequence
 	 * 

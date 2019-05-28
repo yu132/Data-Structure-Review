@@ -2,11 +2,7 @@
 public class TODO {
 	
 	/**
-	 * 马拉车算法 Manacher's Algorithm 马拉车算法
-	 * 
-	 * @see https://www.cnblogs.com/grandyang/p/4475985.html
-	 * @see https://cloud.tencent.com/developer/news/312855
-	 * @see https://blog.csdn.net/qq_32354501/article/details/80084325
+	 * 斐波那契堆
 	 * 
 	 * 背包问题
 	 * 
@@ -16,6 +12,9 @@ public class TODO {
 	 * 
 	 * 逆序对，归并版
 	 * 
+	 * 
+	 * 
+	 * 马拉车算法 Manacher's Algorithm X
 	 * 
 	 * 最长回文子序列 X
 	 * 
