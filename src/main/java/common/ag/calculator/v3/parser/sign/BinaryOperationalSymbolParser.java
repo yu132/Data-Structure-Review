@@ -109,7 +109,7 @@ public abstract class BinaryOperationalSymbolParser extends AbstractElementParse
 	public final static BinaryOperationalSymbolParser BITWISE_RIGHT_SHIFT_SIGN_PARSER = new BinaryOperationalSymbolParser() {
 		@Override
 		protected boolean parseHelper(ParserShared shared) {
-			return FixedLengthElementParser.parser("<<",
+			return FixedLengthElementParser.parser(">>",
 					BinaryOperationalSymbol.BITWISE_RIGHT_SHIFT_SIGN, shared);
 		}
 	};

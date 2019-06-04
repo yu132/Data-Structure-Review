@@ -123,7 +123,7 @@ public final class Calculate {
 							symbolStack[symbolStackSize++] = (Symbol) ele;//将当前符号压入
 							break;
 							
-						} else {//如果优先级小，那么栈顶的符号先运算
+						} else {//如果优先级小或相等，那么栈顶的符号先运算
 							
 							--symbolStackSize;//弹出栈顶符号
 							operandStackSize -= helper(operandStack, operandStackSize,//栈顶符号运算

@@ -42,14 +42,12 @@ public abstract class TernaryOperationalSymbolParser extends AbstractElementPars
 	 */
 	public final static TernaryOperationalSymbolParser CONDITIONAL_SIGN_PARSER = new TernaryOperationalSymbolParser() {
 		
-		private int count = 0;
-		
 		@Override
 		protected boolean parseHelper(ParserShared shared) {
 			if (FixedLengthElementParser.parser("?", BindingSymbol.RIGHT_PARENTHESIS,
 					shared)) {
 				
-				++count;
+				++shared.condidtionalSignCount;
 				
 				boolean flag = false;
 				
@@ -67,7 +65,7 @@ public abstract class TernaryOperationalSymbolParser extends AbstractElementPars
 				
 				shared.elements.add(BindingSymbol.LEFT_PARENTHESIS);
 				
-				BindingSymbolParser.checkers.add(new ExperssionInteriorParenthsisCheck());
+				shared.parenthsisCheckers.add(new ExperssionInteriorParenthsisCheck());
 				
 				return true;
 				
@@ -76,14 +74,14 @@ public abstract class TernaryOperationalSymbolParser extends AbstractElementPars
 				
 				shared.elements.add(TernaryOperationalSymbol.CONDITIONAL_SIGN);
 				
-				--count;
+				--shared.condidtionalSignCount;
 				
-				if (count < 0)
+				if (shared.condidtionalSignCount < 0)
 					throw new ParseException(": is more than ?", shared,
 							shared.from[shared.now ^ 1]);
 				
-				ExperssionInteriorParenthsisCheck checker = BindingSymbolParser.checkers
-						.remove(BindingSymbolParser.checkers.size() - 1);
+				ExperssionInteriorParenthsisCheck checker = shared.parenthsisCheckers
+						.remove(shared.parenthsisCheckers.size() - 1);
 				
 				if (checker.numberOfLeftParenthesis != checker.numberOfRightParenthesis)
 					throw new ParseException(
@@ -95,6 +93,13 @@ public abstract class TernaryOperationalSymbolParser extends AbstractElementPars
 			
 			return false;
 		}
+		
+		@Override
+		public void finalCheck(ParserShared shared) {
+			if (shared.condidtionalSignCount != 0)
+				throw new ParseException("conditional sign imcomplete");
+		}
+		
 	};
 	
 }

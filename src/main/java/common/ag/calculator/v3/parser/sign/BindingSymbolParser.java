@@ -1,8 +1,5 @@
 package common.ag.calculator.v3.parser.sign;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import common.ag.calculator.v3.element.sign.BindingSymbol;
 import common.ag.calculator.v3.parser.AbstractElementParser;
 import common.ag.calculator.v3.parser.ParserShared;
@@ -25,8 +22,6 @@ public abstract class BindingSymbolParser extends AbstractElementParser {
 		public int numberOfRightParenthesis = 0;
 	}
 	
-	static List<ExperssionInteriorParenthsisCheck> checkers = new ArrayList<>();
-	
 	public final static BindingSymbolParser LEFT_PARENTHESIS_PARSER = new BindingSymbolParser() {
 		
 		@Override
@@ -41,8 +36,9 @@ public abstract class BindingSymbolParser extends AbstractElementParser {
 		
 		@Override
 		protected void setSharedAfterParse(ParserShared shared) {
-			if (!checkers.isEmpty())
-				++checkers.get(checkers.size() - 1).numberOfLeftParenthesis;
+			if (!shared.parenthsisCheckers.isEmpty())
+				++shared.parenthsisCheckers
+						.get(shared.parenthsisCheckers.size() - 1).numberOfLeftParenthesis;
 			
 			++shared.numberOfLeftParenthesis;
 			shared.leftParenthesisCheck[shared.now] = true;
@@ -68,9 +64,11 @@ public abstract class BindingSymbolParser extends AbstractElementParser {
 				throw new ParseException(
 						"right parenthesis is more than left parenthsis", shared,
 						shared.from[shared.now ^ 1]);
-			if (!checkers.isEmpty()
-					&& checkers.get(checkers.size() - 1).numberOfLeftParenthesis < checkers
-							.get(checkers.size() - 1).numberOfRightParenthesis)
+			if (!shared.parenthsisCheckers.isEmpty()
+					&& shared.parenthsisCheckers.get(shared.parenthsisCheckers.size()
+							- 1).numberOfLeftParenthesis < shared.parenthsisCheckers
+									.get(shared.parenthsisCheckers.size()
+											- 1).numberOfRightParenthesis)
 				throw new ParseException(
 						"right parenthesis is more than left parenthsis", shared,
 						shared.from[shared.now ^ 1]);
@@ -78,10 +76,20 @@ public abstract class BindingSymbolParser extends AbstractElementParser {
 		
 		@Override
 		protected void setSharedAfterParse(ParserShared shared) {
-			if (!checkers.isEmpty())
-				++checkers.get(checkers.size() - 1).numberOfLeftParenthesis;
+			if (!shared.parenthsisCheckers.isEmpty())
+				++shared.parenthsisCheckers
+						.get(shared.parenthsisCheckers.size() - 1).numberOfLeftParenthesis;
 			++shared.numberOfRightParenthesis;
 			shared.rightParenthesisCheck[shared.now] = true;
+		}
+		
+		@Override
+		public void finalCheck(ParserShared shared) {
+			if (shared.parenthsisCheckers.size() != 0)
+				throw new ParseException("interior experssion imcomplete");
+			if (shared.numberOfLeftParenthesis != shared.numberOfRightParenthesis)
+				throw new ParseException(
+						"number of left parenthsis is not equal to right parenthsis's");
 		}
 	};
 	

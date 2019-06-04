@@ -4,4 +4,6 @@ public interface ElementParser {
 	
 	boolean parse(ParserShared shared);
 	
+	void finalCheck(ParserShared shared);
+	
 }

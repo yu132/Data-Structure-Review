@@ -16,8 +16,11 @@ public abstract class AbstractElementParser implements ElementParser {
 	
 	protected abstract boolean parseHelper(ParserShared shared);
 	
-	protected void checkAfterParse(ParserShared shared) {};
+	protected void checkAfterParse(ParserShared shared) {}
 	
 	protected abstract void setSharedAfterParse(ParserShared shared);
+	
+	@Override
+	public void finalCheck(ParserShared shared) {}
 	
 }

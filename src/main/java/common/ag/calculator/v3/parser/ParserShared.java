@@ -4,36 +4,32 @@ import java.util.ArrayList;
 import java.util.List;
 
 import common.ag.calculator.v3.element.Element;
+import common.ag.calculator.v3.parser.sign.BindingSymbolParser.ExperssionInteriorParenthsisCheck;
 
 public class ParserShared {
 	
 	public String expression;
 	
-	public List<Element> elements;
+	public List<Element> elements = new ArrayList<>();
 	
-	public int now;
+	public int now = 1;
 	
-	public int numberOfLeftParenthesis;
-	public int numberOfRightParenthesis;
+	public int numberOfLeftParenthesis = 0;
+	public int numberOfRightParenthesis = 0;
 	
-	public boolean[] numberCheck;
-	public boolean[] leftParenthesisCheck;
-	public boolean[] rightParenthesisCheck;
-	public boolean[] operationalSymbolCheck;
+	public boolean[] numberCheck = new boolean[2];
+	public boolean[] leftParenthesisCheck = new boolean[2];
+	public boolean[] rightParenthesisCheck = new boolean[2];
+	public boolean[] operationalSymbolCheck = new boolean[2];
 	
-	public int[] from;
+	public int[] from = new int[2];
+	
+	public int condidtionalSignCount = 0;
+	
+	public List<ExperssionInteriorParenthsisCheck> parenthsisCheckers = new ArrayList<>();
 	
 	public ParserShared(String expression) {
 		super();
 		this.expression = expression;
-		this.elements = new ArrayList<>();
-		this.now = 1;
-		this.numberOfLeftParenthesis = 0;
-		this.numberOfRightParenthesis = 0;
-		this.numberCheck = new boolean[2];
-		this.leftParenthesisCheck = new boolean[2];
-		this.rightParenthesisCheck = new boolean[2];
-		this.operationalSymbolCheck = new boolean[2];
-		this.from = new int[2];
 	}
 }

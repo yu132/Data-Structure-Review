@@ -39,6 +39,13 @@ public final class Parser {
 						"Unknown string", shared, shared.from[shared.now ^ 1]);
 		}
 		
+		for (ElementParser parser : Setting.parserMaping.values())
+			parser.finalCheck(shared);
+		
+		//结尾不是数字或者括号
+		if (!(shared.numberCheck[shared.now] || shared.rightParenthesisCheck[shared.now]))
+			throw new ParseException("experssion is not end with number or right parenthsis");
+		
 		return shared.elements.toArray(new Element[shared.elements.size()]);
 	}
 	

@@ -1,7 +1,12 @@
 package common.ag.calculator.v3;
 
+import java.math.BigInteger;
+
 import org.junit.Assert;
 import org.junit.Test;
+
+import common.ag.calculator.v3.parser.exception.ParseException;
+import common.ag.calculator.v3.setting.Setting;
 
 public class TestCal {
 	
@@ -120,8 +125,234 @@ public class TestCal {
 	
 	@Test
 	public void test23() {
+		int before = Setting.doubleScale;
+		Setting.doubleScale = 40;
+		
 		Assert.assertEquals("3.3333333333333333333333333333333333333333",
 				Calculator.calculate("10/3"));
+		
+		Setting.doubleScale = before;
 	}
 	
+	@Test
+	public void test24() {
+		Assert.assertEquals(Integer.toString(123 * 123),
+				Calculator.calculate("1+100*2-200?456+123?123**2:234//2:123*123-4"));
+	}
+	
+	@Test
+	public void test25() {
+		Assert.assertEquals(Integer.toString(123 * 124 - 4),
+				Calculator.calculate("1+100*2-201?456+123?123**2:234//2:123*124-4"));
+	}
+	
+	@Test
+	public void test26() {
+		Assert.assertEquals(Integer.toString(234 / 2),
+				Calculator.calculate("1+100*2-200?1-1?123**2:234//2:123*123-4"));
+	}
+	
+	@Test
+	public void test27() {
+		Assert.assertEquals(Integer.toString(1234 ^ 4321),
+				Calculator.calculate("1234^4321"));
+	}
+	
+	@Test
+	public void test28() {
+		Assert.assertEquals(Integer.toString(1234 | 4321),
+				Calculator.calculate("1234|4321"));
+	}
+	
+	@Test
+	public void test29() {
+		Assert.assertEquals(Integer.toString(1234 & 4321),
+				Calculator.calculate("1234&4321"));
+	}
+	
+	@Test
+	public void test30() {
+		Assert.assertEquals(BigInteger.TEN.shiftLeft(10).toString(),
+				Calculator.calculate("10<<10"));
+	}
+	
+	@Test
+	public void test31() {
+		Assert.assertEquals(new BigInteger("1111111111111").shiftRight(10).toString(),
+				Calculator.calculate("1111111111111>>10"));
+	}
+	
+	@Test
+	public void test32() {
+		Assert.assertEquals("false",
+				Calculator.calculate("!true"));
+	}
+	
+	@Test
+	public void test33() {
+		Assert.assertEquals("true",
+				Calculator.calculate("!false"));
+	}
+	
+	@Test
+	public void test34() {
+		Assert.assertEquals("true",
+				Calculator.calculate("100>1"));
+	}
+	
+	@Test
+	public void test35() {
+		Assert.assertEquals("true",
+				Calculator.calculate("100>=50"));
+	}
+	
+	@Test
+	public void test36() {
+		Assert.assertEquals("false",
+				Calculator.calculate("100<50"));
+	}
+	
+	@Test
+	public void test37() {
+		Assert.assertEquals("true",
+				Calculator.calculate("100<=101"));
+	}
+	
+	@Test
+	public void test38() {
+		Assert.assertEquals("true",
+				Calculator.calculate("100<=100"));
+	}
+	
+	@Test
+	public void test39() {
+		Assert.assertEquals("true",
+				Calculator.calculate("200==200"));
+	}
+	
+	@Test
+	public void test40() {
+		Assert.assertEquals("true",
+				Calculator.calculate("200!=201"));
+	}
+	
+	@Test
+	public void test41() {
+		Assert.assertEquals("1",
+				Calculator.calculate("(int)1.5"));
+	}
+	
+	@Test
+	public void test42() {
+		Assert.assertEquals("2",
+				Calculator.calculate("(double)1+1"));
+	}
+	
+	@Test
+	public void test43() {
+		Assert.assertEquals("true",
+				Calculator.calculate("(boolean)101"));
+	}
+	
+	@Test
+	public void test44() {
+		Assert.assertEquals("false",
+				Calculator.calculate("(boolean)0"));
+	}
+	
+	@Test
+	public void test45() {
+		try {
+			Calculator.calculate("(1+1");//bug
+			Assert.assertTrue(false);
+		} catch (ParseException e) {
+			Assert.assertTrue(true);
+		} catch (Exception e) {
+			Assert.assertTrue(false);
+		}
+	}
+	
+	@Test
+	public void test46() {
+		try {
+			Calculator.calculate("1+1)");
+			Assert.assertTrue(false);
+		} catch (ParseException e) {
+			Assert.assertTrue(true);
+		} catch (Exception e) {
+			Assert.assertTrue(false);
+		}
+	}
+	
+	@Test
+	public void test47() {
+		try {
+			Calculator.calculate("()");
+			Assert.assertTrue(false);
+		} catch (ParseException e) {
+			Assert.assertTrue(true);
+		} catch (Exception e) {
+			Assert.assertTrue(false);
+		}
+	}
+	
+	@Test
+	public void test48() {
+		try {
+			Calculator.calculate("1//");
+			Assert.assertTrue(false);
+		} catch (ParseException e) {
+			Assert.assertTrue(true);
+		} catch (Exception e) {
+			Assert.assertTrue(false);
+		}
+	}
+	
+	@Test
+	public void test49() {
+		try {
+			Calculator.calculate("1?12");
+			Assert.assertTrue(false);
+		} catch (ParseException e) {
+			Assert.assertTrue(true);
+		} catch (Exception e) {
+			Assert.assertTrue(false);
+		}
+	}
+	
+	@Test
+	public void test50() {
+		try {
+			Calculator.calculate("(1?12)+1:1");
+			Assert.assertTrue(false);
+		} catch (ParseException e) {
+			Assert.assertTrue(true);
+		} catch (Exception e) {
+			Assert.assertTrue(false);
+		}
+	}
+	
+	@Test
+	public void test51() {
+		try {
+			Calculator.calculate("((1)?12)+1:1");
+			Assert.assertTrue(false);
+		} catch (ParseException e) {
+			Assert.assertTrue(true);
+		} catch (Exception e) {
+			Assert.assertTrue(false);
+		}
+	}
+	
+	@Test
+	public void test52() {
+		try {
+			Calculator.calculate("1?(12+1:1)");
+			Assert.assertTrue(false);
+		} catch (ParseException e) {
+			Assert.assertTrue(true);
+		} catch (Exception e) {
+			Assert.assertTrue(false);
+		}
+	}
 }
