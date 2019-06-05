@@ -6,6 +6,11 @@ import java.util.Map;
 import common.ag.calculator.v3.parser.ElementParser;
 import common.ag.calculator.v3.parser.StringType;
 
+/**
+ * 全局配置文件，不太好，不能支持多线程使用不同的配置
+ * 
+ * @author 87663
+ */
 public class Setting {
 	
 	/**

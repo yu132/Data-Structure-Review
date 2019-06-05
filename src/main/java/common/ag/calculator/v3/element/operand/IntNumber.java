@@ -2,6 +2,11 @@ package common.ag.calculator.v3.element.operand;
 
 import java.math.BigInteger;
 
+/**
+ * 整形操作数
+ * 
+ * @author 876633022
+ */
 public class IntNumber implements Number {
 	
 	private final static IntNumber[] pool = new IntNumber[256];// 常量池 -128 to 127

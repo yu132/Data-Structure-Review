@@ -1,5 +1,8 @@
 package common.ag.calculator.v3.element.operand;
 
-public interface Number extends Operand {
-	
-}
+/**
+ * 数字操作数
+ * 
+ * @author 876633022
+ */
+public interface Number extends Operand {}

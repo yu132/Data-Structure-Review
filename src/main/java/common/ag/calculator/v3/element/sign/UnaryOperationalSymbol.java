@@ -19,9 +19,14 @@ import common.ag.calculator.v3.element.operand.OperandType;
 import common.ag.calculator.v3.element.sign.priority.BaseOperationalSymbolPriority;
 import common.ag.calculator.v3.element.sign.priority.OperationalSymbolPriority;
 
+/**
+ * 一目运算符号
+ * 
+ * @author 87663
+ */
 public abstract class UnaryOperationalSymbol extends OperationalSymbol {
 	
-	public final static int OPERAND_NUMBER = 1;
+	public final static int OPERAND_NUMBER = 1;//操作数只有1个
 	
 	@Override
 	public int getOperandNumber() {
@@ -33,6 +38,9 @@ public abstract class UnaryOperationalSymbol extends OperationalSymbol {
 		return BaseOperationalSymbolPriority.UNARY_OPERATION_PRIORITY;
 	}
 	
+	/**
+	 * 负号（-），结果返回一个操作数的负数
+	 */
 	public final static UnaryOperationalSymbol NEGATIVE_SIGN = new UnaryOperationalSymbol() {
 		
 		@Override
@@ -65,6 +73,9 @@ public abstract class UnaryOperationalSymbol extends OperationalSymbol {
 		}
 	};
 	
+	/**
+	 * 正号（+），返回这个操作数本身
+	 */
 	public final static UnaryOperationalSymbol POSITIVE_SIGN = new UnaryOperationalSymbol() {
 		
 		@Override
@@ -82,6 +93,9 @@ public abstract class UnaryOperationalSymbol extends OperationalSymbol {
 		}
 	};
 	
+	/**
+	 * 按位取反（~），使整形的每一位从0变成1，1变成0
+	 */
 	public final static UnaryOperationalSymbol BITWISE_NOT_SIGN = new UnaryOperationalSymbol() {
 		
 		@Override
@@ -101,6 +115,9 @@ public abstract class UnaryOperationalSymbol extends OperationalSymbol {
 		}
 	};
 	
+	/**
+	 * 逻辑取反（!），将真变为假，将假变为真
+	 */
 	public final static UnaryOperationalSymbol LOGICAL_NOT_SIGN = new UnaryOperationalSymbol() {
 		
 		@Override
@@ -120,6 +137,9 @@ public abstract class UnaryOperationalSymbol extends OperationalSymbol {
 		}
 	};
 	
+	/**
+	 * 强制转整形（(int)），将一个操作数转换成整形
+	 */
 	public final static UnaryOperationalSymbol TO_INT_SIGN = new UnaryOperationalSymbol() {
 		
 		@Override
@@ -139,6 +159,9 @@ public abstract class UnaryOperationalSymbol extends OperationalSymbol {
 		}
 	};
 	
+	/**
+	 * 强制转浮点型（(double)），将一个操作数转换成浮点型
+	 */
 	public final static UnaryOperationalSymbol TO_DOUBLE_SIGN = new UnaryOperationalSymbol() {
 		
 		@Override
@@ -158,6 +181,9 @@ public abstract class UnaryOperationalSymbol extends OperationalSymbol {
 		}
 	};
 	
+	/**
+	 * 强制转布尔型（(boolean)），将一个操作数转换成布尔型
+	 */
 	public final static UnaryOperationalSymbol TO_BOOLEAN_SIGN = new UnaryOperationalSymbol() {
 		
 		@Override

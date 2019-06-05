@@ -26,15 +26,24 @@ import common.ag.calculator.v3.element.sign.priority.OperationalSymbolPriority;
 import common.ag.calculator.v3.setting.Setting;
 import important.cases.Case8;
 
+/**
+ * 双目运算符号
+ * 
+ * @author 87663
+ *
+ */
 public abstract class BinaryOperationalSymbol extends OperationalSymbol {
 	
-	public final static int OPERAND_NUMBER = 2;
+	public final static int OPERAND_NUMBER = 2;//有两个操作数
 	
 	@Override
 	public int getOperandNumber() {
 		return OPERAND_NUMBER;
 	}
 	
+	/**
+	 * 大于号（>），返回第一个操作数大于第二个操作数的真假性
+	 */
 	public final static BinaryOperationalSymbol GREATER_SIGN = new BinaryOperationalSymbol() {
 		
 		@Override
@@ -73,6 +82,9 @@ public abstract class BinaryOperationalSymbol extends OperationalSymbol {
 		}
 	};
 	
+	/**
+	 * 大于等于号（>=），返回第一个操作数大于等于第二个操作数的真假性
+	 */
 	public final static BinaryOperationalSymbol GREATER_EQUAL_SIGN = new BinaryOperationalSymbol() {
 		
 		@Override
@@ -111,6 +123,9 @@ public abstract class BinaryOperationalSymbol extends OperationalSymbol {
 		}
 	};
 	
+	/**
+	 * 小于号（<=），返回第一个操作数小于第二个操作数的真假性
+	 */
 	public final static BinaryOperationalSymbol LITTLE_SIGN = new BinaryOperationalSymbol() {
 		
 		@Override
@@ -149,6 +164,9 @@ public abstract class BinaryOperationalSymbol extends OperationalSymbol {
 		}
 	};
 	
+	/**
+	 * 小于等于号（<=），返回第一个操作数小于等于第二个操作数的真假性
+	 */
 	public final static BinaryOperationalSymbol LITTLE_EQUAL_SIGN = new BinaryOperationalSymbol() {
 		
 		@Override
@@ -187,6 +205,9 @@ public abstract class BinaryOperationalSymbol extends OperationalSymbol {
 		}
 	};
 	
+	/**
+	 * 等于号（==），返回第一个操作数等于第二个操作数的真假性
+	 */
 	public final static BinaryOperationalSymbol EQUAL_SIGN = new BinaryOperationalSymbol() {
 		
 		@Override
@@ -225,6 +246,9 @@ public abstract class BinaryOperationalSymbol extends OperationalSymbol {
 		}
 	};
 	
+	/**
+	 * 不等于号（!= <>），返回第一个操作数不等于第二个操作数的真假性
+	 */
 	public final static BinaryOperationalSymbol NOT_EQUAL_SIGN = new BinaryOperationalSymbol() {
 		
 		@Override
@@ -263,6 +287,9 @@ public abstract class BinaryOperationalSymbol extends OperationalSymbol {
 		}
 	};
 	
+	/**
+	 * 按位或号（|），将两个操作数中的每一位进行或操作
+	 */
 	public final static BinaryOperationalSymbol BITWISE_OR_SIGN = new BinaryOperationalSymbol() {
 		
 		@Override
@@ -293,6 +320,9 @@ public abstract class BinaryOperationalSymbol extends OperationalSymbol {
 		}
 	};
 	
+	/**
+	 * 按位与号（&），将两个操作数中的每一位进行与操作
+	 */
 	public final static BinaryOperationalSymbol BITWISE_AND_SIGN = new BinaryOperationalSymbol() {
 		
 		@Override
@@ -323,6 +353,9 @@ public abstract class BinaryOperationalSymbol extends OperationalSymbol {
 		}
 	};
 	
+	/**
+	 * 按位异或号（^），将两个操作数中的每一位进行异或操作
+	 */
 	public final static BinaryOperationalSymbol BITWISE_XOR_SIGN = new BinaryOperationalSymbol() {
 		
 		@Override
@@ -353,6 +386,9 @@ public abstract class BinaryOperationalSymbol extends OperationalSymbol {
 		}
 	};
 	
+	/**
+	 * 按位左移号（<<），将第一个操作数向左移动第二个操作数位
+	 */
 	public final static BinaryOperationalSymbol BITWISE_LEFT_SHIFT_SIGN = new BinaryOperationalSymbol() {
 		
 		@Override
@@ -383,6 +419,9 @@ public abstract class BinaryOperationalSymbol extends OperationalSymbol {
 		}
 	};
 	
+	/**
+	 * 按位右移号（>>），将第一个操作数向右移动第二个操作数位
+	 */
 	public final static BinaryOperationalSymbol BITWISE_RIGHT_SHIFT_SIGN = new BinaryOperationalSymbol() {
 		
 		@Override
@@ -413,6 +452,9 @@ public abstract class BinaryOperationalSymbol extends OperationalSymbol {
 		}
 	};
 	
+	/**
+	 * 逻辑或号（||），返回第一个操作数或第二个操作数的真假性
+	 */
 	public final static BinaryOperationalSymbol LOGICAL_OR_SIGN = new BinaryOperationalSymbol() {
 		
 		@Override
@@ -438,6 +480,9 @@ public abstract class BinaryOperationalSymbol extends OperationalSymbol {
 		}
 	};
 	
+	/**
+	 * 逻辑与号（&&），返回第一个操作数与第二个操作数的真假性
+	 */
 	public final static BinaryOperationalSymbol LOGICAL_AND_SIGN = new BinaryOperationalSymbol() {
 		
 		@Override
@@ -463,6 +508,9 @@ public abstract class BinaryOperationalSymbol extends OperationalSymbol {
 		}
 	};
 	
+	/**
+	 * 加号（+），返回第一个操作数加第二个操作数的数值
+	 */
 	public final static BinaryOperationalSymbol ADD_SIGN = new BinaryOperationalSymbol() {
 		
 		@Override
@@ -501,6 +549,9 @@ public abstract class BinaryOperationalSymbol extends OperationalSymbol {
 		}
 	};
 	
+	/**
+	 * 减号（-），返回第一个操作数减第二个操作数的数值
+	 */
 	public final static BinaryOperationalSymbol SUBTRACT_SIGN = new BinaryOperationalSymbol() {
 		
 		@Override
@@ -539,6 +590,9 @@ public abstract class BinaryOperationalSymbol extends OperationalSymbol {
 		}
 	};
 	
+	/**
+	 * 乘号（*），返回第一个操作数乘第二个操作数的数值
+	 */
 	public final static BinaryOperationalSymbol MULTIPLY_SIGN = new BinaryOperationalSymbol() {
 		
 		@Override
@@ -577,6 +631,9 @@ public abstract class BinaryOperationalSymbol extends OperationalSymbol {
 		}
 	};
 	
+	/**
+	 * 除号（/），返回第一个操作数除以第二个操作数的数值（非整除）
+	 */
 	public final static BinaryOperationalSymbol DIVIDE_SIGN = new BinaryOperationalSymbol() {
 		
 		@Override
@@ -604,6 +661,9 @@ public abstract class BinaryOperationalSymbol extends OperationalSymbol {
 		}
 	};
 	
+	/**
+	 * 整除号（//），返回第一个操作数除以第二个操作数后向下取整的数值
+	 */
 	public final static BinaryOperationalSymbol FLOOR_DIVIDE_SIGN = new BinaryOperationalSymbol() {
 		
 		@Override
@@ -648,6 +708,9 @@ public abstract class BinaryOperationalSymbol extends OperationalSymbol {
 		}
 	};
 	
+	/**
+	 * 取模号（%），返回第一个操作数除以第二个操作数剩下的余数
+	 */
 	public final static BinaryOperationalSymbol MODULO_SIGN = new BinaryOperationalSymbol() {
 		
 		@Override
@@ -692,6 +755,11 @@ public abstract class BinaryOperationalSymbol extends OperationalSymbol {
 		}
 	};
 	
+	/**
+	 * 乘方号（**），返回以第一个操作数为底数，第二个操作数为指数的乘方运算的结果
+	 * 
+	 * 注意本运算若指数为浮点数，则会损失精度，而且比较严重，请注意
+	 */
 	public final static BinaryOperationalSymbol POWER_SIGN = new BinaryOperationalSymbol() {
 		
 		/**
@@ -785,6 +853,11 @@ public abstract class BinaryOperationalSymbol extends OperationalSymbol {
 		}
 	};
 	
+	/**
+	 * 对数号（**），返回以第一个操作数为底数，第二个操作数为真数的对数运算的结果
+	 * 
+	 * 注意本运算会损失精度，不过损失的比较小
+	 */
 	public final static BinaryOperationalSymbol LOGARITHM_SIGN = new BinaryOperationalSymbol() {
 		
 		private final BigDecimal LOG10 = new BigDecimal(Math.log(10));

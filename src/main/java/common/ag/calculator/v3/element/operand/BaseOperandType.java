@@ -1,5 +1,10 @@
 package common.ag.calculator.v3.element.operand;
 
+/**
+ * 基本操作数类型
+ * 
+ * @author 876633022
+ */
 public enum BaseOperandType implements OperandType {
 	
 	INTEGER_OPERAND("Integer"), // 整形操作数

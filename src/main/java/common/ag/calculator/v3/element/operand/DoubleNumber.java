@@ -3,6 +3,11 @@ package common.ag.calculator.v3.element.operand;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
+/**
+ * 浮点操作数
+ * 
+ * @author 876633022
+ */
 public class DoubleNumber implements Number {
 	
 	private BigDecimal number;

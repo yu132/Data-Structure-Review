@@ -1,5 +1,10 @@
 package common.ag.calculator.v3.element.operand;
 
+/**
+ * 布尔操作数
+ * 
+ * @author 876633022
+ */
 public class BooleanNumber implements Number {
 	
 	public final static BooleanNumber TRUE = new BooleanNumber(true);

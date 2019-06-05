@@ -1,5 +1,10 @@
 package common.ag.calculator.v3.parser;
 
+/**
+ * 常见的字符串符号类型
+ * 
+ * @author 87663
+ */
 public enum BaseStringType implements StringType {
 	
 	//操作数

@@ -7,8 +7,23 @@ import common.ag.calculator.v3.element.operand.Operand;
 import common.ag.calculator.v3.element.sign.BindingSymbol;
 import common.ag.calculator.v3.element.sign.OperationalSymbol;
 import common.ag.calculator.v3.element.sign.Symbol;
+import common.ag.calculator.v3.element.sign.UnaryOperationalSymbol;
 import common.ag.calculator.v3.element.sign.priority.OperationalSymbolPriority;
 
+/**
+ * 没有检查的运算器，检查这一步骤是由语法解析器来完成的
+ * 
+ * 遇到非法的表达式，运算结果不确定，可能报错，也可能返回一个错误的值
+ * 
+ * 进入的符号依然是中缀形式表示的，其通过将其转换成后缀进行计算，
+ * 
+ * 不过在转换的过程中，就计算了结果，没有保存后缀表达式，在计算这一过程
+ * 
+ * 前缀转后缀并计算见下面的注释
+ * 
+ * @author 87663
+ *
+ */
 public final class Calculate {
 	
 	/**
@@ -20,6 +35,7 @@ public final class Calculate {
 	private static int helper(Operand[] operandStack, int size,
 			OperationalSymbol operationalSymbol) {
 		int operandNumber = operationalSymbol.getOperandNumber();
+		
 		if (size < operandNumber)
 			throw new IllegalArgumentException("operand number not enough");
 		
@@ -124,6 +140,14 @@ public final class Calculate {
 							break;
 							
 						} else {//如果优先级小或相等，那么栈顶的符号先运算
+							
+							//一目运算符有结合性，总是离右边的操作数进的先算
+							//如----1应该是-(-(-(-1))),而不能按照普通的优先级，同样优先级先算前面的
+							if (ele instanceof UnaryOperationalSymbol &&
+									top instanceof UnaryOperationalSymbol) {
+								symbolStack[symbolStackSize++] = (Symbol) ele;
+								break;
+							}
 							
 							--symbolStackSize;//弹出栈顶符号
 							operandStackSize -= helper(operandStack, operandStackSize,//栈顶符号运算

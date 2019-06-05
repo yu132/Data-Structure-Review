@@ -4,6 +4,11 @@ import java.math.BigInteger;
 
 import common.ag.math.IntToOrdinalNumbers;
 
+/**
+ * 操作数大小越界异常
+ * 
+ * @author 87663
+ */
 public class OperandOutOfRangeException extends IllegalArgumentException {
 	
 	private static final long serialVersionUID = 4918858786244539344L;

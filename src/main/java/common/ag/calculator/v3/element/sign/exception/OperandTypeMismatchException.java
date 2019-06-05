@@ -3,6 +3,11 @@ package common.ag.calculator.v3.element.sign.exception;
 import common.ag.calculator.v3.element.operand.OperandType;
 import common.ag.math.IntToOrdinalNumbers;
 
+/**
+ * 操作数类型错误异常
+ * 
+ * @author 87663
+ */
 public class OperandTypeMismatchException extends IllegalArgumentException {
 	
 	private static final long serialVersionUID = 4918858786244539344L;

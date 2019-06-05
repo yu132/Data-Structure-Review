@@ -1,5 +1,10 @@
 package common.ag.calculator.v3.element.sign.priority;
 
+/**
+ * 基本的运算优先级定义
+ * 
+ * @author 87663
+ */
 public enum BaseOperationalSymbolPriority implements OperationalSymbolPriority {
 	
 	// **Ternary operators**	three operand	三元运算

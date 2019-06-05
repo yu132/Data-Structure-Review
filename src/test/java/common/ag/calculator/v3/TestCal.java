@@ -355,4 +355,22 @@ public class TestCal {
 			Assert.assertTrue(false);
 		}
 	}
+	
+	@Test
+	public void test53() {
+		Assert.assertEquals("-1",
+				Calculator.calculate("---------1"));
+	}
+	
+	@Test
+	public void test54() {
+		Assert.assertEquals("1.5",
+				Calculator.calculate("(1 + 1 *2 )/2"));
+	}
+	
+	@Test
+	public void test55() {
+		Assert.assertEquals("-1",
+				Calculator.calculate("-3//2"));
+	}
 }

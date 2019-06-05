@@ -2,6 +2,11 @@ package common.ag.calculator.v3.parser.exception;
 
 import common.ag.calculator.v3.parser.ParserShared;
 
+/**
+ * 解析异常
+ * 
+ * @author 87663
+ */
 public class ParseException extends RuntimeException {
 	
 	private static final long serialVersionUID = -8314729961427444690L;

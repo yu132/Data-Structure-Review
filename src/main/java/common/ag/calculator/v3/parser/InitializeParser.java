@@ -70,6 +70,13 @@ import static common.ag.calculator.v3.parser.sign.UnaryOperationalSymbolParser.T
 
 import common.ag.calculator.v3.setting.Setting;
 
+/**
+ * 初始化符号解析器使用的更低层的符号解析器，将其存在一个Map中，以供调用
+ * 
+ * 并且使用Map的话，可以插拔，可以使用重写的解析器替换这里面的解析器
+ * 
+ * @author 87663
+ */
 public final class InitializeParser {
 	
 	/**

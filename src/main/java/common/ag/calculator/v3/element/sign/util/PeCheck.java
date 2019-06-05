@@ -21,6 +21,7 @@ public final class PeCheck {
 		
 		assert requiredOperandType.length != 0;
 		
+		//检查操作数数量是否符号要求
 		if (!CheckOperandNumber.checkOperandNumber(operandNumber, operands.length))
 			throw new OperandNumberMismatchException(signName, operandNumber, operands.length);
 		

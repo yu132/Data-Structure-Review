@@ -1,5 +1,10 @@
 package common.ag.calculator.v3.element.sign.exception;
 
+/**
+ * 操作数数量不符合异常（如果编程者不出错误的话，应该是不会抛出这个异常的）
+ * 
+ * @author 87663
+ */
 public class OperandNumberMismatchException extends IllegalArgumentException {
 	
 	private static final long serialVersionUID = -7257802760410690443L;
